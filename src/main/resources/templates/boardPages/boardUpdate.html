@@ -12,8 +12,8 @@
         <div class="col">
             <form name="update-form" action="/board/save" method="post">
                 <div style="display: none;">
-                    <input name="id" th:value="${board.id}">
-                    <input name="boardHits" th:value="${board.boardHits}">
+                    <input name="id" th:value="${board.id}" readonly>
+                    <input name="boardHits" th:value="${board.boardHits}" readonly>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">제목</span>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">작성자</span>
-                    <input class="form-control" name="boardWriter" th:value="${board.boardWriter}">
+                    <input class="form-control" name="boardWriter" th:value="${board.boardWriter}" readonly>
                 </div>
                 <div class="input-group mb-3">
                     <textarea class="form-control" name="boardContents" th:text="${board.boardContents}"></textarea>
@@ -48,9 +48,10 @@
     const update_fn = (id) => {
         const title = document.querySelector("[name='boardTitle']").value;
         const writer = document.querySelector("[name='boardWriter']").value;
-        const contents = document.querySelector("[name='boardContents']").text;
+        const contents = document.querySelector("[name='boardContents']").value;
         const hits = document.querySelector("[name='boardHits']").value;
         const pass = document.querySelector("[name='boardPass']").value;
+        console.log(contents);
         axios({
             method:"post",
             url:"/board/update",

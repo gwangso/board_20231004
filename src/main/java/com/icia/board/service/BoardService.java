@@ -4,7 +4,9 @@ import com.icia.board.dto.BoardDTO;
 import com.icia.board.entity.BoardEntity;
 import com.icia.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class BoardService {
     }
 
     public List<BoardDTO> findAll() {
-        List<BoardEntity> boardEntityList = boardRepository.findAll();
+        List<BoardEntity> boardEntityList = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<BoardDTO> boardDTOList = new ArrayList<>();
 
 //        for (BoardEntity boardEntity : boardEntityList){
@@ -49,12 +51,34 @@ public class BoardService {
         return BoardDTO.toBoardDTO(boardEntity);
     }
 
-    public boolean delete(Long id, String boardPass) {
+    /**
+     * 서비스 클래스 메서드에서 @Transactional을 붙이는 경우
+     * 1. jpql로 작성한 메서드 호출할 때
+     * 2. 부모엔티티에서 자식엔티티를 바로 호출할 때
+     */
+
+    @Transactional
+    public void increaseHits(Long id) {
+        boardRepository.increaseHits(id);
+    }
+
+    public boolean delete(Long id, String password) {
         BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         BoardDTO boardDTO = BoardDTO.toBoardDTO(boardEntity);
-        if(boardDTO.getBoardPass().equals(boardPass)){
-
+        if(boardDTO.getBoardPass().equals(password)){
             boardRepository.deleteById(id);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = boardRepository.findById(boardDTO.getId()).orElseThrow(() -> new NoSuchElementException());
+        BoardDTO findDTO = BoardDTO.toBoardDTO(boardEntity);
+        if(findDTO.getBoardPass().equals(boardDTO.getBoardPass())){
+            boardRepository.save(boardEntity);
             return true;
         }else {
             return false;

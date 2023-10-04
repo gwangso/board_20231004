@@ -1,6 +1,8 @@
 package com.icia.board.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter(AccessLevel.PRIVATE)
 public class BaseEntity {
     // 작성시간 컬럼
     @CreationTimestamp // create 할 때 현재시간을 입력

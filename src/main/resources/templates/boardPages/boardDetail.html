@@ -21,7 +21,7 @@
                 <p th:text="${board.boardContents}"></p>
             </div>
             <div class="text-end mb-5">
-                <button class="btn btn-info">글수정</button>
+                <button class="btn btn-info" th:onclick="|location.href='/board/update/'+${board.id}|">글수정</button>
                 <button class="btn btn-danger" onclick="pass_check()">글삭제</button>
             </div>
             <div id="pass-area" style="display: none">
@@ -53,9 +53,10 @@
         event.preventDefault();
         const id = [[${board.id}]];
         const password = document.querySelector("[name='password']").value;
-        axios.get({
+        axios({
+            method:"get",
             url:`/board/delete/${id}`,
-            params:{boardPass : password}
+            params:{password : password}
         }).then(res =>{
             alert("삭제 성공")
             location.href = "/board";

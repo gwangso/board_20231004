@@ -46,8 +46,7 @@ public class BoardController {
 
     @GetMapping("/delete/{id}")
     public ResponseEntity axiosDelete(@PathVariable("id") Long id,
-                                      @RequestBody BoardDTO boardDTO){
-        String boardPass = boardDTO.getBoardPass();
+                                      @RequestParam("boardPass") String boardPass){
         System.out.println(boardPass);
         boolean result = boardService.delete(id, boardPass);
         if (result){

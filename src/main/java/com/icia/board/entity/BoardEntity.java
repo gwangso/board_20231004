@@ -1,7 +1,6 @@
 package com.icia.board.entity;
 
 import com.icia.board.dto.BoardDTO;
-import com.icia.board.util.UtilClass;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +47,7 @@ public class BoardEntity extends BaseEntity{
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());
         boardEntity.setBoardPass(boardDTO.getBoardPass());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(boardDTO.getBoardHits());
         return boardEntity;
     }
 }

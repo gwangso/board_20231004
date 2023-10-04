@@ -73,8 +73,8 @@ public class BoardService {
         }
     }
 
-    @Transactional
     public boolean update(BoardDTO boardDTO) {
+        System.out.println(boardDTO);
         BoardEntity findEntity = boardRepository.findById(boardDTO.getId()).orElseThrow(() -> new NoSuchElementException());
         BoardDTO findDTO = BoardDTO.toBoardDTO(findEntity);
         if(findDTO.getBoardPass().equals(boardDTO.getBoardPass())){

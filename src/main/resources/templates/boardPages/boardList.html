@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+
+<div class="container m-5">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <tr class="table-dark">
+                    <th>글제목</th>
+                    <th>작성자</th>
+                    <th>조회수</th>
+                    <th>작성일</th>
+                </tr>
+                <tr th:each="board : ${boardList}" th:onclick="to_detail([[${board.id}]])" style="cursor: pointer">
+                    <th th:text="${board.boardTitle}"></th>
+                    <th th:text="${board.boardWriter}"></th>
+                    <th th:text="${board.boardHits}"></th>
+                    <th th:text="${board.createdAt}"></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div th:replace="~{component/footer :: footer}"></div>
+</body>
+
+<script th:inline="javascript">
+    const to_detail = (id) =>{
+        location.href = "/board/"+id;
+    }
+</script>
+
+</html>

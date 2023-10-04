@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+
+<div class="container m-5">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex justify-content-between ms-5 mb-5">
+                <h4 th:text="${board.boardTitle}"></h4>
+                <h5 th:text="|작성자 : ${board.boardWriter}|"></h5>
+            </div>
+            <div class="card p-4 mb-5">
+                <p th:text="${board.boardContents}"></p>
+            </div>
+            <div class="text-end mb-5">
+                <button class="btn btn-info">글수정</button>
+                <button class="btn btn-danger" onclick="pass_check()">글삭제</button>
+            </div>
+            <div id="pass-area" style="display: none">
+                <form name="passCheck" th:action="@{|/board/delete/${board.id}|}">
+                    <div class="input-group">
+                        <span class="input-group-text">비밀번호</span>
+                        <input type="password" class="form-control" name="password">
+                        <button class="btn btn-outline-danger">삭제</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div th:replace="~{component/footer :: footer}"></div>
+</body>
+
+<script th:inline="javascript">
+    const pass_check = () =>{
+        const PassArea = document.getElementById("pass-area");
+        PassArea.style.display = "block";
+    }
+
+    const passCheck = document.querySelector("[name='passCheck']")
+
+    passCheck.addEventListener("submit", event =>{
+        event.preventDefault();
+        const id = [[${board.id}]];
+        const password = document.querySelector("[name='password']").value;
+        axios({
+            method:"get",
+            url:"/board/delete/"+id,
+            data:{boardPass : password}
+        }).then(res =>{
+            alert("삭제 성공")
+            location.href = "/board";
+        }).catch(err =>{
+            alert("삭제 실패")
+        });
+    })
+
+
+</script>
+
+</html>

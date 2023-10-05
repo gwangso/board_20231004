@@ -1,4 +1,4 @@
-package com.icia.board.entity.service;
+package com.icia.board.service;
 
 import com.icia.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;

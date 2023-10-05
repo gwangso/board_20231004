@@ -1,6 +1,6 @@
 package com.icia.board.controller;
 
-import com.icia.board.entity.service.CommentService;
+import com.icia.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 

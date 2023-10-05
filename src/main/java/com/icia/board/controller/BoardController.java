@@ -1,8 +1,10 @@
 package com.icia.board.controller;
 
 import com.icia.board.dto.BoardDTO;
-import com.icia.board.entity.service.BoardService;
+import com.icia.board.dto.PageDTO;
+import com.icia.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,10 +32,34 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    /*
+        rest api : 주소값만으로 데이터를 찾을 수 있게 해주는 것
+        /board/10 => 10번 글
+        /board/20 => 20번 글
+        /member/5 => 5번 회원
+
+        페이지를 경로값으로 넣는것은 부적합
+        3페이지에 있는 15번글 조회
+        /board/3/15
+        따라서 페이지는 query String 방식을 사용한다.
+        /board/15?page=3
+    */
+
     @GetMapping
-    public String findAll(Model model){
-        List<BoardDTO> boardDTOList = boardService.findAll();
+    public String findAll(@RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                          Model model){
+        Page<BoardDTO> boardDTOList = boardService.findAll(page);
         model.addAttribute("boardList", boardDTOList);
+        int blockLimit = 3;
+        int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = ((startPage + blockLimit - 1) < boardDTOList.getTotalPages()) ? startPage + blockLimit - 1 : boardDTOList.getTotalPages();
+//        if ((startPage + blockLimit - 1) < boardDTOS.getTotalPages()) {
+//            endPage = startPage + blockLimit - 1;
+//        } else {
+//            endPage = boardDTOS.getTotalPages();
+//        }
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "boardPages/boardList";
     }
 

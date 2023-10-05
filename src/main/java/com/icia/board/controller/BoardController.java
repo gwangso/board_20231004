@@ -92,6 +92,7 @@ public class BoardController {
     public ResponseEntity update(@RequestBody BoardDTO boardDTO){
         try{
             boardService.update(boardDTO);
+
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (NoSuchElementException exception){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

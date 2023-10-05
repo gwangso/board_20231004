@@ -1,4 +1,4 @@
-package com.icia.board.service;
+package com.icia.board.entity.service;
 
 import com.icia.board.dto.BoardDTO;
 import com.icia.board.entity.BoardEntity;
@@ -51,6 +51,16 @@ public class BoardService {
         return BoardDTO.toBoardDTO(boardEntity);
     }
 
+    public BoardDTO findByIdPassword(Long id, String password) {
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        BoardDTO boardDTO = BoardDTO.toBoardDTO(boardEntity);
+        if(password.equals(boardDTO.getBoardPass())){
+            return boardDTO;
+        }else{
+            return null;
+        }
+    }
+
     /**
      * 서비스 클래스 메서드에서 @Transactional을 붙이는 경우
      * 1. jpql로 작성한 메서드 호출할 때
@@ -73,16 +83,10 @@ public class BoardService {
         }
     }
 
-    public boolean update(BoardDTO boardDTO) {
-        System.out.println(boardDTO);
-        BoardEntity findEntity = boardRepository.findById(boardDTO.getId()).orElseThrow(() -> new NoSuchElementException());
-        BoardDTO findDTO = BoardDTO.toBoardDTO(findEntity);
-        if(findDTO.getBoardPass().equals(boardDTO.getBoardPass())){
-            BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
-            boardRepository.save(boardEntity);
-            return true;
-        }else {
-            return false;
-        }
+    public void update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+        boardRepository.save(boardEntity);
     }
+
+
 }

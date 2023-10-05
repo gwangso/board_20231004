@@ -1,7 +1,7 @@
 package com.icia.board.controller;
 
 import com.icia.board.dto.BoardDTO;
-import com.icia.board.service.BoardService;
+import com.icia.board.entity.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +68,18 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/update")
+    public ResponseEntity update(@RequestParam("id") Long id,
+                         @RequestParam("password") String password,
+                         Model model){
+        BoardDTO boardDTO = boardService.findByIdPassword(id,password);
+        if(boardDTO == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id") Long id,
                          Model model){
@@ -79,14 +91,10 @@ public class BoardController {
     @PostMapping("/update")
     public ResponseEntity update(@RequestBody BoardDTO boardDTO){
         try{
-            boolean result = boardService.update(boardDTO);
-            if (result){
-                return new ResponseEntity<>("성공",HttpStatus.OK);
-            } else{
-                return new ResponseEntity<>("비밀번호가 일치하지 않습니다..", HttpStatus.BAD_REQUEST);
-            }
+            boardService.update(boardDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (NoSuchElementException exception){
-            return new ResponseEntity<>("존재하지 않는 게시글입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

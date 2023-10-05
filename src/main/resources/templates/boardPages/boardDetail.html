@@ -52,7 +52,16 @@
         const passInput =document.querySelector("[name='password']").value;
         const id = [[${board.id}]];
         if(type== "update"){
-            location.href = `/board/update/${id}`;
+            axios({
+                method:"get",
+                url:`/board/update`,
+                params:{id : id,
+                password :passInput}
+            }).then(req => {
+                location.href = `/board/update/${id}`;
+            }).catch(err => {
+                alert("비밀번호가 틀렸습니다.");
+            })
         }else if (type == "delete"){
             if(confirm("정말로 삭제하시겠습니까?")){
                 axios({

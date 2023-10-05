@@ -49,7 +49,17 @@ public class BoardController {
     @GetMapping("/delete/{id}")
     public ResponseEntity axiosDelete(@PathVariable("id") Long id,
                                       @RequestParam("password") String password){
-        System.out.println(password);
+        boolean result = boardService.delete(id, password);
+        if (result){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteByAxios(@PathVariable("id") Long id,
+                                        @RequestParam("password") String password){
         boolean result = boardService.delete(id, password);
         if (result){
             return new ResponseEntity<>(HttpStatus.OK);

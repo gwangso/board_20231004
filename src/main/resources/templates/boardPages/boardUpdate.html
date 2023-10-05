@@ -14,6 +14,7 @@
                 <div style="display: none;">
                     <input name="id" th:value="${board.id}" readonly>
                     <input name="boardHits" th:value="${board.boardHits}" readonly>
+                    <input name="boardPass" th:value="${board.boardPass}" readonly>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">제목</span>
@@ -25,10 +26,6 @@
                 </div>
                 <div class="input-group mb-3">
                     <textarea class="form-control" name="boardContents" th:text="${board.boardContents}"></textarea>
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">비밀번호</span>
-                    <input type="password" class="form-control" name="boardPass">
                 </div>
                 <div class="text-end">
                     <input type="button" class="btn btn-outline-primary" value="수정" th:onclick="update_fn([[${board.id}]])">

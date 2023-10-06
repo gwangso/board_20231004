@@ -12,8 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -44,19 +42,30 @@ public class BoardService {
         return pageDTO;
     }
 
-    public Page<BoardDTO> findAll(int page) {
+    public Page<BoardDTO> findAll(int page, String type, String query) {
         page = page - 1;
         int pageLimit = 5;
-        Page<BoardEntity> boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+        Page<BoardEntity> boardEntities = null;
+
+        if(query.equals("")){
+            boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+        }else{
+            if(type.equals("boardTitle")){
+                boardEntities = boardRepository.findByBoardTitleContaining(query, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+            }else if (type.equals("boardWriter")){
+                boardEntities = boardRepository.findByBoardWriterContaining(query, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+            }
+        }
+
 
         Page<BoardDTO> boardList = boardEntities.map(boardEntity ->
-                BoardDTO.builder()
-                        .id(boardEntity.getId())
-                        .boardTitle(boardEntity.getBoardTitle())
-                        .boardWriter(boardEntity.getBoardWriter())
-                        .boardHits(boardEntity.getBoardHits())
-                        .createdAt(UtilClass.dateTimeFormat(boardEntity.getCreatedAt()))
-                        .build());
+            BoardDTO.builder()
+                .id(boardEntity.getId())
+                .boardTitle(boardEntity.getBoardTitle())
+                .boardWriter(boardEntity.getBoardWriter())
+                .boardHits(boardEntity.getBoardHits())
+                .createdAt(UtilClass.dateTimeFormat(boardEntity.getCreatedAt()))
+                .build());
         return boardList;
     }
 

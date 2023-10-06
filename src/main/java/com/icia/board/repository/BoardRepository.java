@@ -1,6 +1,8 @@
 package com.icia.board.repository;
 
 import com.icia.board.entity.BoardEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +25,22 @@ public interface BoardRepository extends JpaRepository<BoardEntity,Long>{
     // @Query(value = "update board_table set board_hits=board_hits where id=:id", nativeQuery = true)
     void increaseHits(@Param("id") Long id);
 
+    // select * from board_table where board_title=?
+    List<BoardEntity> findByBoardTitleOrderByIdDesc(String boardTitle);
 
+    // select * from board_table where board_title like '%query%'
+    List<BoardEntity> findByBoardTitleContainingOrderByIdDesc(String query);
+
+    // select * from board_table where board_writer like '%query%'
+    List<BoardEntity> findByBoardWriterContainingOrderByIdDesc(String query);
+
+    //제목으로 검색한 결과를 Page객체로 리턴
+    Page<BoardEntity> findByBoardTitleContaining(String query, Pageable pageable);
+
+    //작성자로 검색한 결과를 Page객체로 리턴
+    Page<BoardEntity> findByBoardWriterContaining(String query, Pageable pageable);
+
+    //작성자로 검색한 결과를 Page객체로 리턴
+    // select * from board_table where board_title like '%query%' or board_writer like '%query%'
+    Page<BoardEntity> findByBoardTitleContainingOrBoardWriterContaining(String query1, String query2, Pageable pageable);
 }

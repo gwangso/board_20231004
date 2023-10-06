@@ -7,33 +7,36 @@
 <body>
 
 <div th:fragment="nav" id="nav">
-    <ul class="menu">
-        <li class="menu-item">
-            <a href="/">index</a>
-        </li>
-        <li class="menu-item">
-            <a href="/board/save">글작성</a>
-        </li>
-        <li class="menu-item">
-            <a href="/board">글목록</a>
-        </li>
-        <li class="menu-item" id="login-area"></li>
-    </ul>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const loginArea = document.getElementById("login-area");
-        const loginId = [[${session.loginId}]];
-        const loginEmail = [[${session.loginEmail}]];
-        const loginName = [[${session.loginName}]];
-        if (loginEmail != null) {
-            // 로그인 했음
-            loginArea.innerHTML = "<a href='/member/"+loginId+"'>" + loginName + "님 환영해요!</a>" +
-                "<a href='/logout'>로그아웃</a>";
-        } else {
-            // 로그인 안했음
-            loginArea.innerHTML = "<a href='/member/login'>로그인</a>";
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid ms-5 me-5">
+            <a class="navbar-brand" href="#">Board</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/save">글작성</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board">글목록</a>
+                    </li>
+                </ul>
+                <form action="/board" method="get" class="d-flex" role="search">
+                    <select name="type" class="form-select me-2 w-50">
+                        <option value="boardWriter" th:selected="${type=='boardWriter'}">작성자</option>
+                        <option value="boardTitle" th:selected="${type==null or type=='boardTitle'}">제목</option>
+                    </select>
+                    <input class="form-control me-2 w-auto" type="search" name="query" placeholder="검색어를 입력하세요" aria-label="Search" th:value="${query==null? '':query}">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <script>
+        const search_func = () => {
+            console.log("검색함수");
         }
-        /*]]>*/
     </script>
 </div>
 

@@ -47,8 +47,10 @@ public class BoardController {
 
     @GetMapping
     public String findAll(@RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                          @RequestParam(value = "type", required = false, defaultValue = "boardTitle") String type,
+                          @RequestParam(value = "query", required = false, defaultValue = "") String query,
                           Model model){
-        Page<BoardDTO> boardDTOList = boardService.findAll(page);
+        Page<BoardDTO> boardDTOList = boardService.findAll(page, type, query);
         model.addAttribute("boardList", boardDTOList);
         int blockLimit = 3;
         int startPage = (((int) (Math.ceil((double) page / blockLimit))) - 1) * blockLimit + 1;
@@ -60,6 +62,9 @@ public class BoardController {
 //        }
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("page", page);
+        model.addAttribute("type", type);
+        model.addAttribute("query", query);
         return "boardPages/boardList";
     }
 

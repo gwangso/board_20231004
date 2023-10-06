@@ -4,9 +4,6 @@ import com.icia.board.entity.BoardEntity;
 import com.icia.board.util.UtilClass;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Getter
 @Setter
 @Builder // 객체를 만들 때 객체를 만드는 코드 스타일, 기본생성자가 무력화됨

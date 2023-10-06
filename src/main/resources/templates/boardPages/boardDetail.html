@@ -10,16 +10,25 @@
 <div class="container m-5">
     <div class="row">
         <div class="col">
-            <div>
-                <h4 th:text="${board.boardTitle}"></h4><span th:text="|(${board.boardHits})|"></span>
+            <div class="mb-4 ms-3">
+                <h4 th:text="${board.boardTitle}" style="display: inline"></h4><h5 class="ms-3" th:text="|(${board.boardHits})|" style="display: inline"></h5>
             </div>
-            <div class="d-flex justify-content-between ms-5 mb-5">
+            <div class="d-flex justify-content-between ms-3 mb-5">
                 <h5 th:text="|작성자 : ${board.boardWriter}|"></h5>
                 <h6 th:text="|작성일 : ${board.createdAt}|"></h6>
             </div>
-            <div class="card p-4 mb-5">
+            <hr>
+            <div class="p-4 mb-3 mx-4">
                 <p th:text="${board.boardContents}"></p>
+                <did class="card p-4 mt-4">
+                    <div class="row ">
+                        <div th:each="fileName : ${board.storedFileName}" class="col-4">
+                            <img th:src="@{|/upload/${fileName}}" width="100%" alt="">
+                        </div>
+                    </div>
+                </did>
             </div>
+            <hr>
             <div class="text-end mb-5">
                 <button class="btn btn-info" onclick="pass_area('update')">글수정</button>
                 <button class="btn btn-danger" onclick="pass_area('delete')">글삭제</button>

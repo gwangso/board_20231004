@@ -7,9 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Table(name = "board_file_table")
 @Getter
 @Setter(AccessLevel.PRIVATE)
+@Table(name = "board_file_table")
 @Entity
 public class BoardFileEntity extends UtilClass {
     @Id
@@ -22,7 +22,16 @@ public class BoardFileEntity extends UtilClass {
     @Column(length = 100)
     private String storedFileName;
 
-    @ManyToOne
-    @JoinColumn(name = "boardId")
-    private BoardEntity boardId;
+    // BoardFile : Board = 다 대 일
+    @ManyToOne(fetch = FetchType.LAZY) // fetch
+    @JoinColumn(name = "board_id") // DB에 생성될 참조 컬럼의 이름
+    private BoardEntity boardEntity; //부모 엔티티 타입으로 정의
+
+    public static BoardFileEntity toSaveBoardFile(String originalFileName, String storedFileName, BoardEntity savedEntity) {
+        BoardFileEntity boardFileEntity = new BoardFileEntity();
+        boardFileEntity.setOriginalFileName(originalFileName);
+        boardFileEntity.setStoredFileName(storedFileName);
+        boardFileEntity.setBoardEntity(savedEntity);
+        return boardFileEntity;
+    }
 }

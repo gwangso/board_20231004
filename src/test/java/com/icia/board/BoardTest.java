@@ -2,6 +2,8 @@ package com.icia.board;
 
 import com.icia.board.dto.BoardDTO;
 import com.icia.board.entity.BoardEntity;
+import com.icia.board.entity.BoardFileEntity;
+import com.icia.board.repository.BoardFileRepository;
 import com.icia.board.service.BoardService;
 import com.icia.board.repository.BoardRepository;
 import com.icia.board.util.UtilClass;
@@ -12,8 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -22,6 +27,9 @@ public class BoardTest {
     private BoardService boardService;
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardFileRepository boardFileRepository;
 
     private BoardDTO newBoard(int i){
         BoardDTO boardDTO = new BoardDTO();
@@ -37,7 +45,11 @@ public class BoardTest {
     public void dataInsert(){
         IntStream.rangeClosed(61,100).forEach(i ->{
             BoardDTO boardDTO = newBoard(i);
-            boardService.save(boardDTO);
+            try {
+                boardService.save(boardDTO);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -112,5 +124,20 @@ public class BoardTest {
         System.out.println("boardList.hasPrevious() = " + boardList.hasPrevious()); // 이전페이지 존재 여부
         System.out.println("boardList.isFirst() = " + boardList.isFirst()); // 첫페이지인지 여부
         System.out.println("boardList.isLast() = " + boardList.isLast()); // 마지막페이지인지 여부
+    }
+
+    @Test
+    @Transactional // 부모테이블에서 자식테이블을 바로 참조할 때
+    @DisplayName("참조관계 확인")
+    public void findTest(){
+        // BoardEntity 조회
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(69L);
+        BoardEntity boardEntity = optionalBoardEntity.get();
+        // BoardEntity 에서 BoardFileEntity 조회
+        List<BoardFileEntity> boardFileEntityList = boardEntity.getBoardFileEntityList();
+        boardFileEntityList.forEach(boardFileEntity -> {
+            System.out.println(boardFileEntity.getOriginalFileName());
+            System.out.println(boardFileEntity.getStoredFileName());
+        });
     }
 }

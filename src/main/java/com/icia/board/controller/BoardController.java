@@ -1,7 +1,6 @@
 package com.icia.board.controller;
 
 import com.icia.board.dto.BoardDTO;
-import com.icia.board.dto.PageDTO;
 import com.icia.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -27,7 +26,7 @@ public class BoardController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute BoardDTO boardDTO){
+    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.save(boardDTO);
         return "redirect:/board";
     }
@@ -77,7 +76,7 @@ public class BoardController {
         return "boardPages/boardDetail";
     }
 
-    @GetMapping("/delete/{id}")
+/*    @GetMapping("/delete/{id}")
     public ResponseEntity axiosDelete(@PathVariable("id") Long id,
                                       @RequestParam("password") String password){
         boolean result = boardService.delete(id, password);
@@ -86,7 +85,7 @@ public class BoardController {
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteByAxios(@PathVariable("id") Long id,

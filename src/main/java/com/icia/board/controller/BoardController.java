@@ -1,7 +1,9 @@
 package com.icia.board.controller;
 
 import com.icia.board.dto.BoardDTO;
+import com.icia.board.dto.CommentDTO;
 import com.icia.board.service.BoardService;
+import com.icia.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -19,6 +22,7 @@ import java.util.NoSuchElementException;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping("/save")
     public String save(){
@@ -72,7 +76,9 @@ public class BoardController {
                          Model model){
         boardService.increaseHits(id);
         BoardDTO boardDTO = boardService.findById(id);
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
         model.addAttribute("board",boardDTO);
+        model.addAttribute("commentList", commentDTOList);
         return "boardPages/boardDetail";
     }
 

@@ -2,6 +2,7 @@ package com.icia.board.dto;
 
 import com.icia.board.entity.BoardEntity;
 import com.icia.board.entity.BoardFileEntity;
+import com.icia.board.entity.CommentEntity;
 import com.icia.board.util.UtilClass;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,19 +49,6 @@ public class BoardDTO {
             boardDTO.setFileAttached(0);
         }
 
-//        boardDTO.setCreatedAt(boardEntity.getCreatedAt());
-//        String formattedDate = boardEntity.getCreatedAt().format((DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-//        boardDTO.setCreatedAt(formattedDate);
-
-//        BoardDTO boardDTO = BoardDTO.builder()
-//                .id(boardEntity.getId())
-//                .boardWriter(boardEntity.getBoardWriter())
-//                .boardTitle(boardEntity.getBoardTitle())
-//                .boardContents(boardEntity.getBoardContents())
-//                .boardPass(boardEntity.getBoardPass())
-//                .boardHits(boardEntity.getBoardHits())
-//                .createdAt(UtilClass.dateTimeFormat(boardEntity.getCreatedAt()))
-//                .build();
         return boardDTO;
     }
 }
